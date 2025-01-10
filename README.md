@@ -15,9 +15,12 @@ This script is ***not supported, authorized, or afilliated in any way, shape or 
 *wineORC 2.8+ is also not supported, authorized, afilliated, a part of, or maintained by DarDarDar.*
 
 ## Supported Revivals
-* Projekt Placeholder (Public & Private)
-* IttehBlox
-* SyntaxEco (unknown & untested - use at own risk!)
+* Projekt Placeholder (Public & Private) (old)
+* IttehBlox (old)
+* SyntaxEco (unknown & untested - use at own risk!) (old)
+* Junebug
+* Hexagon (TBA)
+* watrbx (TBA)
   - more can be added via pull request.
 
 ## ⚡ What this does
