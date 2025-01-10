@@ -49,6 +49,11 @@ uninstall ()
 		rm $HOME/.syntaxeco -rf
 		sudo rm /usr/share/applications/syntaxeco.desktop
 	fi
+ 	if [ $CURRENT == "Junebug" ]
+	then
+		rm $HOME/.junebug -rf
+		sudo rm /usr/share/applications/junebug.desktop
+	fi
 	sudo update-desktop-database
 	echo "Uninstall done. Run the script again if you'd like to reinstall. "
         exit
@@ -60,6 +65,7 @@ then
 	echo "1. Placeholder "
 	echo "2. ItteBlox "
 	echo "3. SyntaxEco "
+ 	echo "4. Junebug "
 	read UNINSTALLOPT 
 	if [ $UNINSTALLOPT == "1" ]
 	then
@@ -76,6 +82,11 @@ then
 		CURRENT="SyntaxEco"
 		uninstall
 	fi
+ 	if [ $UNINSTALLOPT == "4" ]
+	then
+		CURRENT="Junebug"
+		uninstall
+	fi
 fi
 if [ "$1" == "dxvk" ] || [ "$2" == "dxvk" ]
 then
@@ -83,6 +94,7 @@ then
 	echo "1. Placeholder wineprefix "
 	echo "2. ItteBlox wineprefix "
 	echo "3. SyntaxEco wineprefix "
+ 	echo "4. Junebug wineprefix "
 	read DXVKOPT
 	mkdir $HOME/tmp
 	cd $HOME/tmp
@@ -100,6 +112,10 @@ then
 	if [ $DXVKOPT == "3" ]
 	then
 		WINEPREFIX=$HOME/.syntaxeco ./setup_dxvk.sh install
+	fi
+ 	if [ $DXVKOPT == "4" ]
+	then
+		WINEPREFIX=$HOME/.junebug ./setup_dxvk.sh install
 	fi
 	cd $HOME
 	rm tmp -rf
@@ -197,7 +213,7 @@ othercheck ()
 	else
 		echo "wget is installed, skipping check.. "
 	fi
-	if [ $CURRENT == "ItteBlox" ] || [ $CURRENT == "Placeholder" ] || [ $CURRENT == "SyntaxEco" ]
+	if [ $CURRENT == "ItteBlox" ] || [ $CURRENT == "Placeholder" ] || [ $CURRENT == "SyntaxEco" ] || [ $CURRENT == "Junebug" ]
 	then	
 		if [ ! -x /usr/bin/curl ]
 		then
@@ -231,6 +247,16 @@ uri ()
 		echo "Type=Application" >> placeholder.desktop
 		echo "Exec=env WINEPREFIX=$HOME/.placeholder wine $HOME/.placeholder/drive_c/users/$USER/AppData/Local/Placeholder/Versions/$PLACEHOLDERVER/PlaceholderPlayerLauncher.exe %u" >> placeholder.desktop
 		echo "MimeType=x-scheme-handler/placeholder-player-placeholder16" >> placeholder.desktop
+	fi
+ 	if [ $CURRENT == "Junebug" ]
+	then
+		touch junebug.desktop
+		echo "[Desktop Entry]" >> junebug.desktop
+		echo "Name=Junebug" >> junebug.desktop
+		echo "Comment=https://junebug.ws" >> junebug.desktop
+		echo "Type=Application" >> junebug.desktop
+		echo "Exec=env WINEPREFIX=$HOME/.junebug wine $HOME/.junebug/drive_c/users/$USER/AppData/Local/Junebug/Versions/$JUNEBUGVER/JunebugPlayerLauncher.exe %u" >> junebug.desktop
+		echo "MimeType=x-scheme-handler/roblox-player-syntax" >> junebug.desktop
 	fi
 	if [ $CURRENT == "SyntaxEco" ]
 	then
@@ -298,11 +324,30 @@ syntaxeco ()
 	uri
 }
 
+junebug ()
+{
+	winecheck
+	othercheck
+	echo "$CURRENT is now being installed, please wait as this may take some time. "
+ 	echo "$CURRENT is untested and new, please practice some caution with this private-server."
+        sleep 3
+	JUNEBUGVER=`curl https://setup.junebug.ws/version` # uri
+	mkdir $HOME/.junebug
+	WINEPREFIX=$HOME/.junebug winecfg -v win10
+	mkdir $HOME/tmp
+	cd $HOME/tmp
+	wget https://setup.junebug.ws/JunebugPlayerLauncher.exe # BRO, WHY DID HE NOT JUST FOLLOW THE CDN SCHEMA FULLY?
+	echo "Your browser may open to the Junebug website when this is ran. Just close it. "
+	WINEPREFIX=$HOME/.junebug wine JunebugPlayerLauncher.exe
+	uri
+}
+
 
 echo "Welcome to Wineorc, please select an revival to install. (see --help for other options) "
 echo "1. Placeholder "
 echo "2. ItteBlox "
 echo "3. SyntaxEco "
+echo "4. Junebug "
 read OPT
 if [ $OPT == "1" ]
 then
@@ -318,6 +363,11 @@ if [ $OPT == "3" ]
 then
 	CURRENT="SyntaxEco"
 	syntaxeco
+fi
+if [ $OPT == "4" ]
+then
+	CURRENT="Junebug"
+	junebug
 fi
 
 
